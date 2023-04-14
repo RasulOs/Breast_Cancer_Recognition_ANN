@@ -269,24 +269,30 @@ print(history_dict.keys())
 # Type of resultFit <class 'keras.callbacks.History'>, resultFit: <keras.callbacks.History object at 0x00000280A092EE60>
 # dict_keys(['loss', 'accuracy', 'val_loss', 'val_accuracy'])
 
-def plot_graph(history, parameter1: str, parameter2: str):
+def plot_graph(history, parameter1: str, parameter2: str, save_fig_loc: str = None):
     plt.plot(history[parameter1])
     plt.plot(history[parameter2])
     plt.title('Accuracy of a model')
     plt.ylabel('Accuracy percent')
     plt.xlabel('Number of Epochs')
     plt.legend(['train', 'val'], loc='upper left')
+
+    if save_fig_loc is not None:
+        plt.savefig(save_fig_loc)
+
     plt.show()
+
+    return plt
     
 
 # %%
 # Plot accuracy of a model with recpect to number of epochs.
-plot_graph(history_dict, 'accuracy', 'val_accuracy')
+plot_graph(history_dict, 'accuracy', 'val_accuracy', "../output/accuracy.png")
 
 # %%
 # Plot loss of a model with respect to number of epochs
-plot_graph(history_dict, 'loss', 'val_loss')
+plot_graph(history_dict, 'loss', 'val_loss', "../output/loss.png")
 
 # %%
-sns.heatmap(cm, annot=True)
+sns.heatmap(cm, annot=True).set_title("Confusion Matrix").get_figure().savefig("../output/confusion_matrix.png", dpi = 400)
 # %%
