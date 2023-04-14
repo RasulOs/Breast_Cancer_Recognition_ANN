@@ -10,8 +10,9 @@ from keras.layers import Dense
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-
+import seaborn as sns
 import os
+
 print(os.listdir("../"))
 
 # %%
@@ -282,3 +283,4 @@ plt.xlabel('Number of Epochs')
 plt.legend(['train', 'val'], loc='upper left')
 plt.show()
 # %%
+sns.heatmap(cm/np.sum(cm), fmt=".2%" annot=True)
