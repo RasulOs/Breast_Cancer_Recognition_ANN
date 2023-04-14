@@ -121,42 +121,49 @@ print(f'y_test {y_test.shape}')
 
 # Creating ANN model with sequential layers
 # %%
-classifier = Sequential()
+def compile_classifier(_activation = 'relu', _kernel_initializer = 'random_normal', 
+                       _optimizer = 'adam', _input_dim = 30, _metrics = ['accuracy']):
+    classifier = Sequential()
 
-# First hidden layer
-# Layers are dense layer, which means that every neuron will be connected to every neuron
-# in the next and in the previous layers.
-# Input size will be 30 neurons (first layer) and the second layer (first hidden layer)
-# size will be 16 neuron. Activation function is relu - rectified linear unit.
-# kernel_initializer is the property that you set when you firstly initialize the random weights
-# of ANN. "random_normal" generates random numbers within a normal distribution.
-classifier.add(Dense(16, activation='relu', kernel_initializer='random_normal', input_dim=30))
+    # First hidden layer
+    # Layers are dense layer, which means that every neuron will be connected to every neuron
+    # in the next and in the previous layers.
+    # Input size will be 30 neurons (first layer) and the second layer (first hidden layer)
+    # size will be 16 neuron. Activation function is relu - rectified linear unit.
+    # kernel_initializer is the property that you set when you firstly initialize the random weights
+    # of ANN. "random_normal" generates random numbers within a normal distribution.
+    classifier.add(Dense(16, activation=_activation, kernel_initializer=_kernel_initializer, input_dim=_input_dim))
 
-# second hidden layer
-# The amount of neruon is 6 and activation function is relu
-classifier.add(Dense(6, activation='relu', kernel_initializer='random_normal'))
+    # second hidden layer
+    # The amount of neruon is 6 and activation function is relu
+    classifier.add(Dense(6, activation=_activation, kernel_initializer=_kernel_initializer))
 
-# third hidden layer
-classifier.add(Dense(6, activation='relu', kernel_initializer='random_normal'))
+    # third hidden layer
+    classifier.add(Dense(6, activation=_activation, kernel_initializer=_kernel_initializer))
 
-# Fourth hidden layer
-classifier.add(Dense(6, activation='relu', kernel_initializer='random_normal'))
+    # Fourth hidden layer
+    classifier.add(Dense(6, activation=_activation, kernel_initializer=_kernel_initializer))
 
-# output layer
-# It is again a dense layer with one neuron, because our model needs output in form of 1 or 0,
-# Malignant or Bening. Activation function is sigmoid because this function transforms the value to be
-# in the range of 0 or 1. Formula is: 1/(1 + e^-x).
-classifier.add(Dense(1, activation='sigmoid', kernel_initializer='random_normal'))
+    # output layer
+    # It is again a dense layer with one neuron, because our model needs output in form of 1 or 0,
+    # Malignant or Bening. Activation function is sigmoid because this function transforms the value to be
+    # in the range of 0 or 1. Formula is: 1/(1 + e^-x).
+    classifier.add(Dense(1, activation='sigmoid', kernel_initializer=_kernel_initializer))
 
-# compile the ANN. Prepare ANN for the work. 
-# optimizer='adam' means that this ANN will use Adam algorithm. It is an algorithm
-# that uses Stochastic Gradient Descent algorithm. It is good for large datasets.
-# loss='binary_crossentropy' is the algorithm of finding loss (error or, we can say difference between
-# predicted and real outputs). 'binary_crossentropy' is the best for finding errors between binary 
-# (True or False) outputs.
-# metrics = ['accuracy'] helps to evaluate a model. It creates two variables, count and count
-# and this metric counts how many times predicted output(label) was the same as real output(label).
-classifier.compile(optimizer ='adam',loss='binary_crossentropy', metrics =['accuracy'])
+    # compile the ANN. Prepare ANN for the work. 
+    # optimizer='adam' means that this ANN will use Adam algorithm. It is an algorithm
+    # that uses Stochastic Gradient Descent algorithm. It is good for large datasets.
+    # loss='binary_crossentropy' is the algorithm of finding loss (error or, we can say difference between
+    # predicted and real outputs). 'binary_crossentropy' is the best for finding errors between binary 
+    # (True or False) outputs.
+    # metrics = ['accuracy'] helps to evaluate a model. It creates two variables, count and count
+    # and this metric counts how many times predicted output(label) was the same as real output(label).
+    classifier.compile(optimizer = _optimizer, loss='binary_crossentropy', metrics = _metrics)
+
+    return classifier
+
+classifier = compile_classifier()
+
 
 # %%
 # Train the model.
@@ -262,25 +269,24 @@ print(history_dict.keys())
 # Type of resultFit <class 'keras.callbacks.History'>, resultFit: <keras.callbacks.History object at 0x00000280A092EE60>
 # dict_keys(['loss', 'accuracy', 'val_loss', 'val_accuracy'])
 
+def plot_graph(history, parameter1: str, parameter2: str):
+    plt.plot(history[parameter1])
+    plt.plot(history[parameter2])
+    plt.title('Accuracy of a model')
+    plt.ylabel('Accuracy percent')
+    plt.xlabel('Number of Epochs')
+    plt.legend(['train', 'val'], loc='upper left')
+    plt.show()
+    
 
 # %%
 # Plot accuracy of a model with recpect to number of epochs.
-plt.plot(history_dict['accuracy'])
-plt.plot(history_dict['val_accuracy'])
-plt.title('Accuracy of a model')
-plt.ylabel('Accuracy percent')
-plt.xlabel('Number of Epochs')
-plt.legend(['train', 'val'], loc='upper left')
-plt.show()
+plot_graph(history_dict, 'accuracy', 'val_accuracy')
 
 # %%
 # Plot loss of a model with respect to number of epochs
-plt.plot(history_dict['loss'])
-plt.plot(history_dict['val_loss'])
-plt.title('Loss of a model')
-plt.ylabel('Loss function')
-plt.xlabel('Number of Epochs')
-plt.legend(['train', 'val'], loc='upper left')
-plt.show()
+plot_graph(history_dict, 'loss', 'val_loss')
+
 # %%
-sns.heatmap(cm/np.sum(cm), fmt=".2%" annot=True)
+sns.heatmap(cm, annot=True)
+# %%
