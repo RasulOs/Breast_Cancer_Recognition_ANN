@@ -1,4 +1,5 @@
 # %%
+# Rasul Osmanbayli
 import numpy as np # numpy for matrix operations
 import pandas as pd # for reading csv files and manipulate with them
 from sklearn.preprocessing import StandardScaler
@@ -269,12 +270,13 @@ print(history_dict.keys())
 # Type of resultFit <class 'keras.callbacks.History'>, resultFit: <keras.callbacks.History object at 0x00000280A092EE60>
 # dict_keys(['loss', 'accuracy', 'val_loss', 'val_accuracy'])
 
-def plot_graph(history, parameter1: str, parameter2: str, save_fig_loc: str = None):
+def plot_graph(history, parameter1: str, parameter2: str, title: str, 
+               ylabel:str, xlabel, save_fig_loc: str = None):
     plt.plot(history[parameter1])
     plt.plot(history[parameter2])
-    plt.title('Accuracy of a model')
-    plt.ylabel('Accuracy percent')
-    plt.xlabel('Number of Epochs')
+    plt.title(title)
+    plt.ylabel(ylabel)
+    plt.xlabel(xlabel)
     plt.legend(['train', 'val'], loc='upper left')
 
     if save_fig_loc is not None:
@@ -287,11 +289,13 @@ def plot_graph(history, parameter1: str, parameter2: str, save_fig_loc: str = No
 
 # %%
 # Plot accuracy of a model with recpect to number of epochs.
-plot_graph(history_dict, 'accuracy', 'val_accuracy', "../output/accuracy.png")
+plot_graph(history_dict, 'accuracy', 'val_accuracy', "Accuracy of a Model",
+           "Accuracy percent", "Number of Epochs", "../output/accuracy.png")
 
 # %%
 # Plot loss of a model with respect to number of epochs
-plot_graph(history_dict, 'loss', 'val_loss', "../output/loss.png")
+plot_graph(history_dict, 'loss', 'val_loss', " Loss of a model",
+           "Loss function", "Number of Epochs", "../output/loss.png")
 
 # %%
 sns.heatmap(cm, annot=True).set_title("Confusion Matrix").get_figure().savefig("../output/confusion_matrix.png", dpi = 400)
